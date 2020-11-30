@@ -25,7 +25,7 @@ services:
 
  ```
  cd /opt/FIWARE/orion
- docker-compose up -d
+ docker-compose -f docker-compose up -d
  curl http://127.0.0.1:1026/version
  ```
 
@@ -191,3 +191,39 @@ curl "http://127.0.0.1:1026/v2/entities?type=Car&georel=near;maxDistance:1000000
 ## Subscription
 
 
+Créer le serveur ```catcher``` depuis le répertoire ```/catcher```
+
+```
+docker-compose up -d
+```
+
+Vous pouvez tester le serveur avec la commande
+
+```
+curl -X POST "http://127.0.0.1:8066/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+{
+    "id": "roomtest",
+    "type": "Room",
+    "temperature": 25.3,
+    "light": false
+}
+EOF
+```
+
+Ensuite regarder le résultat avec 
+```
+docker logs catcher
+```
+
+
+
+```
+curl -H "Fiware-ServicePath: /test" -X POST "http://127.0.0.1:1026/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+{
+    "id": "roomtest",
+    "type": "Room",
+    "temperature": 25.3,
+    "light": false
+}
+EOF
+```

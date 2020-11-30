@@ -79,6 +79,10 @@ services:
     restart: always
     image: fiware/pep-proxy 
     container_name: fiware-wilma
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
     environment:
       - PEP_PROXY_AUTH_ENABLED=true
       - PEP_PROXY_PUBLIC_PATHS=/public
@@ -86,13 +90,13 @@ services:
       - PEP_PROXY_APP_SSL_ENABLED=false
       - PEP_PROXY_APP_PORT=80
       - PEP_PROXY_APP_HOST=172.25.1.8
-      - PEP_PROXY_APP_ID=xxx
+      - PEP_PROXY_APP_ID=b148d72b-184b-47cd-a4e2-3b5180cb8ec6
       - PEP_PROXY_IDM_SSL_ENABLED=false
       - PEP_PROXY_IDM_PORT=3000
       - PEP_PROXY_IDM_HOST=172.25.1.5
       - PEP_PROXY_PORT=8080
-      - PEP_PASSWORD=xxx
-      - PEP_PROXY_USERNAME=xxx
+      - PEP_PASSWORD=pep_proxy_5c22e208-50d0-4f48-88bd-dfb943e54854
+      - PEP_PROXY_USERNAME=pep_proxy_93f6133e-2491-4eb3-a305-1c372813cbab
     depends_on: 
       - keyrock
       - orion-proxy
