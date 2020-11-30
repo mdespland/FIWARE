@@ -1,0 +1,8 @@
+version: "3" 
+
+services:
+  catcher:
+    container_name: catcher
+    image: mdetools/catcher
+    ports:
+      - "8066:8080"

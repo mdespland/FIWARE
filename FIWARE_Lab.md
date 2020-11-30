@@ -28,18 +28,24 @@ ssh -i ../marc.pem 195.220.224.147
 Installation de docker et docker-compose
 
 ```
-yum install -y yum-utils
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+yum update
+yum install -y yum-utils git
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-yum install docker-ce docker-ce-cli containerd.io
+yum install -y docker-ce docker-ce-cli containerd.io
+systemctl start docker
+systemctl enable docker
 ```
 
 The continue the installation
 ```
 curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-yum install git
 cd /opt
 git clone https://github.com/mdespland/FIWARE.git
+
+
 ```
 
 [Back to README](./README.md)
