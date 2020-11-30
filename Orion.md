@@ -191,18 +191,35 @@ curl "http://127.0.0.1:1026/v2/entities?type=Car&georel=near;maxDistance:1000000
 ## Subscription
 
 
-Créer le serveur ```catcher``` depuis le répertoire ```/catcher```
-
 ```
-docker-compose up -d
-```
-
-Vous pouvez tester le serveur avec la commande
-
-```
-curl -X POST "http://127.0.0.1:8066/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+curl -X POST http://127.0.0.1:1026/v2/subscriptions -H "Content-Type: application/json" -d @- <<EOF
 {
-    "id": "roomtest",
+    "description": "A test subscription",
+    "subject": {
+      "entities": [
+        {
+          "idPattern": ".*",
+          "typePattern": ".*"
+        }
+      ]
+    },
+    "notification": {
+      "http": {
+        "url": "http://172.25.1.7:8080/api/subscribe"
+      }
+    },
+    "expires": "2040-01-01T14:00:00.00Z"
+}
+EOF
+```
+
+
+## Service Path
+
+```
+curl -H "Fiware-ServicePath: /a" -X POST "http://127.0.0.1:1026/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+{
+    "id": "rooma",
     "type": "Room",
     "temperature": 25.3,
     "light": false
@@ -210,20 +227,42 @@ curl -X POST "http://127.0.0.1:8066/v2/entities?options=keyValues" -H "Content-T
 EOF
 ```
 
-Ensuite regarder le résultat avec 
 ```
-docker logs catcher
-```
-
-
-
-```
-curl -H "Fiware-ServicePath: /test" -X POST "http://127.0.0.1:1026/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+curl -H "Fiware-ServicePath: /a/b" -X POST "http://127.0.0.1:1026/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
 {
-    "id": "roomtest",
+    "id": "roomab",
     "type": "Room",
     "temperature": 25.3,
     "light": false
 }
 EOF
+```
+
+
+```
+curl -H "Fiware-ServicePath: /c" -X POST "http://127.0.0.1:1026/v2/entities?options=keyValues" -H "Content-Type: application/json" -d @- <<EOF
+{
+    "id": "roomc",
+    "type": "Room",
+    "temperature": 25.3,
+    "light": false
+}
+EOF
+```
+
+```
+curl -H "Fiware-ServicePath: /a/b" "http://127.0.0.1:1026/v2/entities"
+```
+
+```
+curl -H "Fiware-ServicePath: /a" "http://127.0.0.1:1026/v2/entities"
+```
+
+```
+curl -H "Fiware-ServicePath: /a#" "http://127.0.0.1:1026/v2/entities"
+```
+
+
+```
+curl "http://127.0.0.1:1026/v2/entities"
 ```
